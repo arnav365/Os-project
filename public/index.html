@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS | Secure Authentication</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Abstract Background UI -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    
+    <main class="auth-container">
+        <!-- Toast Notification Area -->
+        <div id="toast" class="toast">
+            <span id="toast-message"></span>
+        </div>
+
+        <div class="auth-box glass-panel">
+            <div class="auth-header">
+                <div class="logo">
+                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <h1>System Auth</h1>
+                </div>
+                <p>Establishing secure connection.</p>
+            </div>
+
+            <!-- Custom Tab Switcher -->
+            <div class="tab-switcher">
+                <button class="tab-btn active" id="tab-login">Sign In</button>
+                <button class="tab-btn" id="tab-register">Create Account</button>
+                <div class="tab-indicator" id="tab-indicator"></div>
+            </div>
+
+            <div class="form-wrapper">
+                <!-- Login Form -->
+                <form id="form-login" class="auth-form active-form">
+                    <div class="input-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="admin@domain.local">
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="Enter your key">
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox" id="login-remember">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-link">Recover key</a>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-login-submit">Authenticate <span class="spinner" id="spinner-login"></span></button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="form-register" class="auth-form">
+                    <div class="input-group">
+                        <label for="reg-username">System ID (Username)</label>
+                        <input type="text" id="reg-username" required placeholder="john_doe">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" required placeholder="user@domain.local">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password">Security Key (Password)</label>
+                        <input type="password" id="reg-password" required placeholder="Min 8 chars, 1 upper, 1 lower, 1 num, 1 special (@$!%*?&)">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-role">Access Level</label>
+                        <select id="reg-role">
+                            <option value="user">Standard User</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-reg-submit">Initialize Identity <span class="spinner" id="spinner-reg"></span></button>
+                </form>
+
+                <!-- MFA Verification Form -->
+                <form id="form-mfa" class="auth-form">
+                    <div style="margin-bottom: 1.5rem; text-align: center;">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin: 0 auto; margin-bottom: 0.5rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
+                        <h2 style="font-size: 1.25rem; font-weight: 500;">Two-Factor Authentication</h2>
+                        <p id="mfa-message" class="text-muted" style="font-size: 0.875rem; margin-top: 0.25rem;">Please enter the security code.</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="mfa-otp">Security Code</label>
+                        <input type="text" id="mfa-otp" required placeholder="000000" autocomplete="off" style="letter-spacing: 0.5em; text-align: center; font-family: monospace; font-size: 1.25rem;">
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-mfa-submit">Verify Identity <span class="spinner" id="spinner-mfa"></span></button>
+                    <button type="button" class="btn-secondary" style="margin-top: 1rem; background: transparent; border: 1px solid rgba(255,255,255,0.1);">Cancel</button>
+                </form>
+
+                <!-- Forgot Password Form -->
+                <form id="form-forgot" class="auth-form">
+                    <div style="margin-bottom: 1.5rem; text-align: center;">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin: 0 auto; margin-bottom: 0.5rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4v-3.286l7.464-7.464A6 6 0 1115 9z"></path></svg>
+                        <h2 style="font-size: 1.25rem; font-weight: 500;">Recover Key</h2>
+                        <p id="forgot-message" class="text-muted" style="font-size: 0.875rem; margin-top: 0.25rem;">Enter email to receive recovery instructions.</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="forgot-email">Email Address</label>
+                        <input type="email" id="forgot-email" required placeholder="user@domain.local">
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-forgot-submit">Send Recovery Link <span class="spinner" id="spinner-forgot"></span></button>
+                    <button type="button" class="btn-secondary" style="margin-top: 1rem; background: transparent; border: 1px solid rgba(255,255,255,0.1);">Cancel</button>
+                </form>
+
+                <!-- Reset Password Form -->
+                <form id="form-reset" class="auth-form">
+                    <div style="margin-bottom: 1.5rem; text-align: center;">
+                        <h2 style="font-size: 1.25rem; font-weight: 500;">Reset Security Key</h2>
+                    </div>
+                    <div class="input-group">
+                        <label for="reset-otp">Security OTP</label>
+                        <input type="text" id="reset-otp" required placeholder="000000" autocomplete="off" style="letter-spacing: 0.5em; text-align: center; font-family: monospace; font-size: 1.25rem;">
+                    </div>
+                    <div class="input-group">
+                        <label for="reset-password">New Security Key</label>
+                        <input type="password" id="reset-password" required placeholder="Min 8 chars, 1 upper, 1 lower">
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-reset-submit">Update Key <span class="spinner" id="spinner-reset"></span></button>
+                    <button type="button" class="btn-secondary" style="margin-top: 1rem; background: transparent; border: 1px solid rgba(255,255,255,0.1);">Cancel</button>
+                </form>
+
+                <!-- Authenticated View Mode -->
+                <div id="view-success" class="auth-form success-pane">
+                    <div class="success-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h2>Access Granted</h2>
+                    <p>Welcome back, <span id="success-username" class="highlight"></span>.</p>
+                    <div class="terminal-box">
+                        <code><span class="sys">sys></span> Session token established.</code>
+                        <code><span class="sys">sys></span> Role identified: <span id="success-role"></span></code>
+                    </div>
+                    <button type="button" class="btn-secondary">Terminate Session</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
